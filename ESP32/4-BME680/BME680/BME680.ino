@@ -14,10 +14,41 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
 
+#include <BLEServer.h>
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLECharacteristic.h>
+
 /*#define BME_SCK 18
 #define BME_MISO 19
 #define BME_MOSI 23
 #define BME_CS 5*/
+
+
+#define bleServerName "ESP32_BME_Sensor"
+#define SERVICE_UUID "9a8b5685-334b-46ed-bf2b-975113dcdd34"
+#define temperatureCharacteristicUUID "d82312ea-1422-43c7-8931-408812a8f32b"
+#define humidityCharacteristicUUID "b2106683-c2c3-47ab-a6ef-9ca7268a8b7b"
+#define pressureCharacteristicUUID "12bba2b5-1097-437b-9eeb-826e2eb48f0a"
+#define temperatureCharacteristicUUID "3bc5829d-5ea3-4182-99cf-566970062b9f"
+
+BLEServer *pServer;
+BLEService *pService;
+BLECharacteristic *smokeCharacteristic;
+BLEAdvertising *pAdvertising;
+
+bool deviceConnected = false;
+
+class MyServerCallbacks: public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    deviceConnected = true;
+  };
+  void onDisconnect(BLEServer* pServer) {
+    deviceConnected = false;
+    pServer->startAdvertising();
+  }
+};
+
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
@@ -41,6 +72,68 @@ void setup() {
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
   bme.setGasHeater(320, 150); // 320*C for 150 ms
+
+  
+  // Create the BLE Device
+  BLEDevice::init(bleServerName);
+
+  // Create the BLE Server
+  pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  // Create the BLE Service
+  pService = pServer->createService(SERVICE_UUID);
+
+  // Create BLE Characteristics and corresponding Descriptors
+  temperatureCharacteristic = pService->createCharacteristic( 
+                                temperatureCharacteristicUUID,
+                                BLECharacteristic::PROPERTY_READ |
+                                BLECharacteristic::PROPERTY_WRITE |
+                                BLECharacteristic::PROPERTY_NOTIFY );
+  BLEDescriptor temperatureDescriptor(BLEUUID((uint16_t)0x2901));
+  temperatureDescriptor.setValue("Temperature");
+  temperatureCharacteristic->addDescriptor(&smokeDescriptor);
+
+  humidityCharacteristic = pService->createCharacteristic( 
+                                humidityCharacteristicUUID,
+                                BLECharacteristic::PROPERTY_READ |
+                                BLECharacteristic::PROPERTY_WRITE |
+                                BLECharacteristic::PROPERTY_NOTIFY );
+  BLEDescriptor humidityDescriptor(BLEUUID((uint16_t)0x2901));
+  humidityDescriptor.setValue("Humidity level.");
+  humidityCharacteristic->addDescriptor(&humidityDescriptor);
+
+  pressureCharacteristic = pService->createCharacteristic( 
+                                pressureCharacteristicUUID,
+                                BLECharacteristic::PROPERTY_READ |
+                                BLECharacteristic::PROPERTY_WRITE |
+                                BLECharacteristic::PROPERTY_NOTIFY );
+  BLEDescriptor pressureDescriptor(BLEUUID((uint16_t)0x2901));
+  pressureDescriptor.setValue("Atmospheric Pressure");
+  pressureCharacteristic->addDescriptor(&pressureDescriptor);
+
+  gasCharacteristic = pService->createCharacteristic( 
+                                gasCharacteristicUUID,
+                                BLECharacteristic::PROPERTY_READ |
+                                BLECharacteristic::PROPERTY_WRITE |
+                                BLECharacteristic::PROPERTY_NOTIFY );
+  BLEDescriptor smokeDescriptor(BLEUUID((uint16_t)0x2901));
+  smokeDescriptor.setValue("Smoke level number.");
+  smokeCharacteristic->addDescriptor(&smokeDescriptor);
+
+
+  pService->start();
+  // Start advertising
+  pAdvertising = BLEDevice::getAdvertising();
+  
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->setScanResponse(true);
+  pAdvertising->setMinPreferred(0x06);
+  pAdvertising->setMinPreferred(0x12);
+  pServer->getAdvertising()->start();
+
+  Serial.println("Characteristic defined!");
+  
 }
 
 void loop() {

@@ -1,0 +1,32 @@
+BME - 9a8b5685-334b-46ed-bf2b-975113dcdd34
+
+   Temperature Char - d82312ea-1422-43c7-8931-408812a8f32b
+
+   Humidity Char - b2106683-c2c3-47ab-a6ef-9ca7268a8b7b
+
+   pressure Char - 12bba2b5-1097-437b-9eeb-826e2eb48f0a
+
+   gas char - 3bc5829d-5ea3-4182-99cf-566970062b9f
+
+
+MQ135 - d9ef7f1a-9f13-4762-ad46-0ca444dc0733
+
+   smoke char - 9f8230a6-3921-427a-99de-d675cf1352aa
+
+motion - 750d6a26-892f-4ec4-a0aa-5e23dded5742
+
+   motion char - 11ab0df6-3cd6-49bd-bde6-e1ff1e6f8f77
+
+microphone - bdb3e28f-f827-4fe6-adff-553c8a2c8009
+
+   microphone char - 3e319490-b8e1-4fe6-bfa1-39ccaf3032ad
+
+door - 78081b1b-1dc9-4f7b-a0ce-38019b870887
+
+   door char - be743f89-6c68-4eee-b60f-1727888cd9b9
+
+water - 4ecb82c7-60f9-405e-96d1-731f0e97c012
+
+   water char - f94f7e98-6e5e-4f44-9cfb-1e9f53a437f0
+
+
