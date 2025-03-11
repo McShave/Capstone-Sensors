@@ -30,11 +30,14 @@
 #define temperatureCharacteristicUUID "d82312ea-1422-43c7-8931-408812a8f32b"
 #define humidityCharacteristicUUID "b2106683-c2c3-47ab-a6ef-9ca7268a8b7b"
 #define pressureCharacteristicUUID "12bba2b5-1097-437b-9eeb-826e2eb48f0a"
-#define temperatureCharacteristicUUID "3bc5829d-5ea3-4182-99cf-566970062b9f"
+#define gasCharacteristicUUID "3bc5829d-5ea3-4182-99cf-566970062b9f"
 
 BLEServer *pServer;
 BLEService *pService;
-BLECharacteristic *smokeCharacteristic;
+BLECharacteristic *temperatureCharacteristic;
+BLECharacteristic *humidityCharacteristic;
+BLECharacteristic *pressureCharacteristic;
+BLECharacteristic *gasCharacteristic;
 BLEAdvertising *pAdvertising;
 
 bool deviceConnected = false;
@@ -57,7 +60,7 @@ Adafruit_BME680 bme; // I2C
 //Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial);
   Serial.println(F("BME680 async test"));
 
@@ -92,7 +95,7 @@ void setup() {
                                 BLECharacteristic::PROPERTY_NOTIFY );
   BLEDescriptor temperatureDescriptor(BLEUUID((uint16_t)0x2901));
   temperatureDescriptor.setValue("Temperature");
-  temperatureCharacteristic->addDescriptor(&smokeDescriptor);
+  temperatureCharacteristic->addDescriptor(&temperatureDescriptor);
 
   humidityCharacteristic = pService->createCharacteristic( 
                                 humidityCharacteristicUUID,
@@ -103,23 +106,23 @@ void setup() {
   humidityDescriptor.setValue("Humidity level.");
   humidityCharacteristic->addDescriptor(&humidityDescriptor);
 
-  pressureCharacteristic = pService->createCharacteristic( 
-                                pressureCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ |
-                                BLECharacteristic::PROPERTY_WRITE |
-                                BLECharacteristic::PROPERTY_NOTIFY );
-  BLEDescriptor pressureDescriptor(BLEUUID((uint16_t)0x2901));
-  pressureDescriptor.setValue("Atmospheric Pressure");
-  pressureCharacteristic->addDescriptor(&pressureDescriptor);
+  // pressureCharacteristic = pService->createCharacteristic( 
+  //                               pressureCharacteristicUUID,
+  //                               BLECharacteristic::PROPERTY_READ |
+  //                               BLECharacteristic::PROPERTY_WRITE |
+  //                               BLECharacteristic::PROPERTY_NOTIFY );
+  // BLEDescriptor pressureDescriptor(BLEUUID((uint16_t)0x2901));
+  // pressureDescriptor.setValue("Atmospheric Pressure");
+  // pressureCharacteristic->addDescriptor(&pressureDescriptor);
 
-  gasCharacteristic = pService->createCharacteristic( 
-                                gasCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ |
-                                BLECharacteristic::PROPERTY_WRITE |
-                                BLECharacteristic::PROPERTY_NOTIFY );
-  BLEDescriptor smokeDescriptor(BLEUUID((uint16_t)0x2901));
-  smokeDescriptor.setValue("Smoke level number.");
-  smokeCharacteristic->addDescriptor(&smokeDescriptor);
+  // gasCharacteristic = pService->createCharacteristic( 
+  //                               gasCharacteristicUUID,
+  //                               BLECharacteristic::PROPERTY_READ |
+  //                               BLECharacteristic::PROPERTY_WRITE |
+  //                               BLECharacteristic::PROPERTY_NOTIFY );
+  // BLEDescriptor gasDescriptor(BLEUUID((uint16_t)0x2901));
+  // gasDescriptor.setValue("gas level number.");
+  // gasCharacteristic->addDescriptor(&gasDescriptor);
 
 
   pService->start();
@@ -182,6 +185,17 @@ void loop() {
   Serial.print(F("Approx. Altitude = "));
   Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
   Serial.println(F(" m"));
+
+  temperatureCharacteristic->setValue(String(bme.temperature));
+  humidityCharacteristic->setValue(String(bme.humidity));
+  // pressureCharacteristic->setValue(String(bme.pressure));
+  // gasCharacteristic->setValue(String(bme.gas_resistance));
+  
+  temperatureCharacteristic->notify();
+  humidityCharacteristic->notify();
+  // pressureCharacteristic->notify();
+  // gasCharacteristic->notify();
+
 
   Serial.println();
   delay(2000);

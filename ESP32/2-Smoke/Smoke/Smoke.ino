@@ -47,8 +47,6 @@ void setup() {
   // Create BLE Characteristics and corresponding Descriptors
   smokeCharacteristic = pService->createCharacteristic( 
                                 smokeCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ ||
-                                BLECharacteristic::PROPERTY_WRITE ||
                                 BLECharacteristic::PROPERTY_NOTIFY );
   BLEDescriptor smokeDescriptor(BLEUUID((uint16_t)0x2901));
   smokeDescriptor.setValue("Smoke level number.");
