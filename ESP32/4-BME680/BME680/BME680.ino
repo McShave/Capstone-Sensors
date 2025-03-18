@@ -90,39 +90,38 @@ void setup() {
   // Create BLE Characteristics and corresponding Descriptors
   temperatureCharacteristic = pService->createCharacteristic( 
                                 temperatureCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ |
-                                BLECharacteristic::PROPERTY_WRITE |
                                 BLECharacteristic::PROPERTY_NOTIFY );
-  BLEDescriptor temperatureDescriptor(BLEUUID((uint16_t)0x2901));
-  temperatureDescriptor.setValue("Temperature");
+  BLEDescriptor temperatureDescriptor2901(BLEUUID((uint16_t)0x2901));
+  BLEDescriptor temperatureDescriptor2902(BLEUUID((uint16_t)0x2902));
+  temperatureDescriptor2901.setValue("Temperature");
   temperatureCharacteristic->addDescriptor(&temperatureDescriptor);
 
   humidityCharacteristic = pService->createCharacteristic( 
                                 humidityCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ |
-                                BLECharacteristic::PROPERTY_WRITE |
                                 BLECharacteristic::PROPERTY_NOTIFY );
-  BLEDescriptor humidityDescriptor(BLEUUID((uint16_t)0x2901));
-  humidityDescriptor.setValue("Humidity level.");
-  humidityCharacteristic->addDescriptor(&humidityDescriptor);
+  BLEDescriptor humidityDescriptor2901(BLEUUID((uint16_t)0x2901));
+  BLEDescriptor humidityDescriptor2902(BLEUUID((uint16_t)0x2902));
+  humidityDescriptor2901.setValue("Humidity level.");
+  humidityCharacteristic->addDescriptor(&humidityDescriptor2901);
+  humidityCharacteristic->addDescriptor(&humidityDescriptor2902);
 
   // pressureCharacteristic = pService->createCharacteristic( 
   //                               pressureCharacteristicUUID,
-  //                               BLECharacteristic::PROPERTY_READ |
-  //                               BLECharacteristic::PROPERTY_WRITE |
   //                               BLECharacteristic::PROPERTY_NOTIFY );
-  // BLEDescriptor pressureDescriptor(BLEUUID((uint16_t)0x2901));
-  // pressureDescriptor.setValue("Atmospheric Pressure");
-  // pressureCharacteristic->addDescriptor(&pressureDescriptor);
+  // BLEDescriptor pressureDescriptor2901(BLEUUID((uint16_t)0x2901));
+  // BLEDescriptor pressureDescriptor2902(BLEUUID((uint16_t)0x2902));
+  // pressureDescriptor2901.setValue("Atmospheric Pressure");
+  // pressureCharacteristic->addDescriptor(&pressureDescriptor2901);
+  // pressureCharacteristic->addDescriptor(&pressureDescriptor2902);
 
   // gasCharacteristic = pService->createCharacteristic( 
   //                               gasCharacteristicUUID,
-  //                               BLECharacteristic::PROPERTY_READ |
-  //                               BLECharacteristic::PROPERTY_WRITE |
   //                               BLECharacteristic::PROPERTY_NOTIFY );
-  // BLEDescriptor gasDescriptor(BLEUUID((uint16_t)0x2901));
-  // gasDescriptor.setValue("gas level number.");
-  // gasCharacteristic->addDescriptor(&gasDescriptor);
+  // BLEDescriptor gasDescriptor2901(BLEUUID((uint16_t)0x2901));
+  // BLEDescriptor gasDescriptor2902(BLEUUID((uint16_t)0x2902));
+  // gasDescriptor2901.setValue("gas level number.");
+  // gasCharacteristic->addDescriptor(&gasDescriptor2901);
+  // gasCharacteristic->addDescriptor(&gasDescriptor2902);
 
 
   pService->start();

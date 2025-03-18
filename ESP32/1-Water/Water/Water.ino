@@ -58,12 +58,12 @@ void setup() {
   // Create BLE Characteristics and corresponding Descriptors
   smokeCharacteristic = pService->createCharacteristic( 
                                 waterCharacteristicUUID,
-                                BLECharacteristic::PROPERTY_READ |
-                                BLECharacteristic::PROPERTY_WRITE |
                                 BLECharacteristic::PROPERTY_NOTIFY );
-  BLEDescriptor waterDescriptor(BLEUUID((uint16_t)0x2901));
-  waterDescriptor.setValue("Smoke level number.");
-  waterCharacteristic->addDescriptor(&smokeDescriptor);
+  BLEDescriptor waterDescriptor2901(BLEUUID((uint16_t)0x2901));
+  BLEDescriptor waterDescriptor2902(BLEUUID((uint16_t)0x2902));
+  waterDescriptor2901.setValue("Smoke level number.");
+  waterCharacteristic->addDescriptor(&waterDescriptor2901);
+  waterCharacteristic->addDescriptor(&waterDescriptor2902);
 
   pService->start();
   // Start advertising
