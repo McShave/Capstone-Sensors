@@ -1,3 +1,5 @@
+// ESP32 with BME Sensor - MAC address: 3C:8A:1F:A4:65:8A
+
 /***
   Read Our Complete Guide: https://RandomNerdTutorials.com/esp32-bme680-sensor-arduino/
   Designed specifically to work with the Adafruit BME680 Breakout ----> http://www.adafruit.com/products/3660 These sensors use I2C or SPI to communicate, 2 or 4 pins are required to interface. Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit! Written by Limor Fried & Kevin Townsend for Adafruit Industries. BSD license, all text above must be included in any redistribution
@@ -94,7 +96,8 @@ void setup() {
   BLEDescriptor temperatureDescriptor2901(BLEUUID((uint16_t)0x2901));
   BLEDescriptor temperatureDescriptor2902(BLEUUID((uint16_t)0x2902));
   temperatureDescriptor2901.setValue("Temperature");
-  temperatureCharacteristic->addDescriptor(&temperatureDescriptor);
+  temperatureCharacteristic->addDescriptor(&temperatureDescriptor2901);
+  temperatureCharacteristic->addDescriptor(&temperatureDescriptor2902);
 
   humidityCharacteristic = pService->createCharacteristic( 
                                 humidityCharacteristicUUID,
