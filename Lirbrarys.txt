@@ -1,0 +1,8 @@
+Getting Started:
+https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/
+https://randomnerdtutorials.com/install-esp32-esp8266-usb-drivers-cp210x-windows/
+https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads
+
+Sensers:
+Adafruit BME680
+DHT Sensor Library by Adafruit
